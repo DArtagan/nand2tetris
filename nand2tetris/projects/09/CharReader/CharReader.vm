@@ -1,0 +1,38 @@
+function CharReader.new 0
+push constant 1
+call Memory.alloc 1
+pop pointer 0
+push pointer 0
+return
+function CharReader.read 1
+push argument 0
+pop pointer 0
+call Screen.clearScreen 0
+pop temp 0
+call Keyboard.keyPressed 0
+pop local 0
+push local 0
+push constant 0
+eq
+not
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push local 0
+call Output.printChar 1
+pop temp 0
+goto IF_END0
+label IF_FALSE0
+push local 0
+push constant 0
+eq
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push pointer 0
+call CharReader.read 1
+pop temp 0
+label IF_FALSE1
+label IF_END0
+push constant 0
+return

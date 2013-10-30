@@ -1,0 +1,27 @@
+#============================================================
+# PROGRAMMER:........ William H. Weiskopf
+# USERID:............ WWEISKOP
+# COURSE:............ CSCI-410
+# TERM............... FALL 2013
+# ASIGNMENT:......... ECS 09
+# FILENAME:.......... Main.jack
+# PYTHON VERSION:.... 3.3.0
+#============================================================
+/* The intention of this program is to draw lines.
+Initially it gives you the opportunity to sketch
+your line before making it permanent.*/
+class Main {
+  function void main() {
+    var Intro inst;
+    var Draw drawing;
+    let inst = Intro.new();
+    do inst.write();
+    let drawing = Draw.new();
+    while(true) {
+      do drawing.read();
+    }
+    do Sys.error(42);
+    do Sys.halt();
+    return;
+  }
+}

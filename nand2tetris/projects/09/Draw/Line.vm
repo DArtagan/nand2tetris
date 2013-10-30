@@ -1,0 +1,47 @@
+function Line.new 0
+push constant 2
+call Memory.alloc 1
+pop pointer 0
+push argument 0
+pop this 0
+push argument 1
+pop this 1
+push pointer 0
+return
+function Line.getPoint1 0
+push argument 0
+pop pointer 0
+push this 0
+return
+function Line.getPoint2 0
+push argument 0
+pop pointer 0
+push this 1
+return
+function Line.draw 6
+push argument 0
+call Line.getPoint1 1
+pop local 4
+push argument 0
+call Line.getPoint2 1
+pop local 5
+push local 4
+call Point.getX 1
+pop local 0
+push local 5
+call Point.getX 1
+pop local 1
+push local 4
+call Point.getY 1
+pop local 2
+push local 5
+call Point.getY 1
+pop local 3
+push local 0
+push local 2
+push local 1
+push local 3
+call Screen.drawLine 4
+pop temp 0
+push constant 0
+return

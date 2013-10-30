@@ -1,0 +1,15 @@
+function Main.main 1
+call CharReader.new 0
+pop local 0
+label WHILE_EXP0
+push constant 0
+not
+not
+if-goto WHILE_END0
+push local 0
+call CharReader.read 1
+pop temp 0
+goto WHILE_EXP0
+label WHILE_END0
+push constant 0
+return

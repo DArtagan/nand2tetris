@@ -1,0 +1,25 @@
+#============================================================
+# PROGRAMMER:........ William H. Weiskopf
+# USERID:............ WWEISKOP
+# COURSE:............ CSCI-410
+# TERM............... FALL 2013
+# ASIGNMENT:......... ECS 09
+# FILENAME:.......... Intro.jack
+# PYTHON VERSION:.... 3.3.0
+#============================================================
+class Intro {
+  static String instructions;
+  field String required;
+
+  constructor Intro new() {
+/* Cause instructions are important. */
+    let instructions = "Use WASD to draw. Space sets line.";
+    let required = null;
+    return this;
+  }
+
+  method void write() {
+    do Output.printString(instructions);
+    return;
+  }
+}

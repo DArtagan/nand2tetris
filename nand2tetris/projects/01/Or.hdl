@@ -1,0 +1,22 @@
+// PROGRAMMER: William H. Weiskopf
+// USERID: WWEISKOP
+// COURSE: CSCI-410
+// TERM: FALL 2013
+// This file is based on a file from www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/01/Or.hdl
+
+/**
+ * Or gate: out = 1 if {a==1 or b==1}, 0 otherwise
+ */
+
+CHIP Or {
+    IN a, b;
+    OUT out;
+
+    PARTS:
+    Nand(a=a, b=a, out=s1);
+	Nand(a=b, b=b, out=s2);
+	Nand(a=s1, b=s2, out=out);
+}

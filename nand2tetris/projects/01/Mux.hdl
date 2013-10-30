@@ -1,0 +1,23 @@
+// PROGRAMMER: William H. Weiskopf
+// USERID: WWEISKOP
+// COURSE: CSCI-410
+// TERM: FALL 2013
+// This file is based on a file from www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/01/Mux.hdl
+
+/** 
+ * Multiplexor. If sel==1 then out=b else out=a.
+ */
+
+CHIP Mux {
+    IN a, b, sel;
+    OUT out;
+
+    PARTS:
+    Not(in=sel, out=selNot);
+	And(a=a, b=selNot, out=s1);
+	And(a=b, b=sel, out=s2);
+	Or(a=s1, b=s2, out=out);
+}

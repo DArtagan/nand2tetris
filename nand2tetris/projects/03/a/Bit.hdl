@@ -1,0 +1,23 @@
+// PROGRAMMER: William H. Weiskopf
+// USERID: WWEISKOP
+// COURSE: CSCI-410
+// TERM: FALL 2013
+// This file is based on a file from www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/03/a/Bit.hdl
+
+/**
+ * 1-bit register.
+ * If load[t]=1 then out[t+1] = in[t]
+ *              else out does not change (out[t+1]=out[t])
+ */
+
+CHIP Bit {
+    IN in, load;
+    OUT out;
+
+    PARTS:
+    Mux(a=output, b=in, sel=load, out=s1);
+	DFF(in=s1, out=output, out=out);
+}

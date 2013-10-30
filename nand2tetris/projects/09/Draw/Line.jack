@@ -1,0 +1,41 @@
+#============================================================
+# PROGRAMMER:........ William H. Weiskopf
+# USERID:............ WWEISKOP
+# COURSE:............ CSCI-410
+# TERM............... FALL 2013
+# ASIGNMENT:......... ECS 09
+# FILENAME:.......... Line.jack
+# PYTHON VERSION:.... 3.3.0
+#============================================================
+class Line {
+  field Point point1;
+  field Point point2;
+
+  constructor Line new (Point a, Point b) {
+    let point1 = a;
+    let point2 = b;
+    return this;
+  }
+
+  method Point getPoint1() {
+    return point1;
+  }
+
+  method Point getPoint2() {
+    return point2;
+  }
+  
+  function void draw(Line line) {
+    var int x1, x2, y1, y2;
+    var Point point1, point2;
+    let point1 = line.getPoint1();
+    let point2 = line.getPoint2();
+    let x1 = point1.getX();
+    let x2 = point2.getX();
+    let y1 = point1.getY();
+    let y2 = point2.getY();
+    do Screen.drawLine(x1, y1, x2, y2);
+    return;
+  }
+
+}

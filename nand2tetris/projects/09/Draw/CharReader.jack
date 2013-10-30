@@ -1,0 +1,21 @@
+class CharReader {
+  field int notNeeded;
+
+  constructor CharReader new () {
+    return this;
+  }
+
+  method void read() {
+    var char key;
+    do Screen.clearScreen();
+    let key = Keyboard.keyPressed();
+    if (~(key = 0)) {
+      do Output.printChar(key);
+    } else {
+      if (key = 0) {
+        do read();
+      }
+    }
+    return;
+  }
+}

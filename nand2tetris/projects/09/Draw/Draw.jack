@@ -1,0 +1,131 @@
+#============================================================
+# PROGRAMMER:........ William H. Weiskopf
+# USERID:............ WWEISKOP
+# COURSE:............ CSCI-410
+# TERM............... FALL 2013
+# ASIGNMENT:......... ECS 09
+# FILENAME:.......... Draw.jack
+# PYTHON VERSION:.... 3.3.0
+#============================================================
+class Draw {
+  static int MAXROWS;
+  static int MAXCOLS;
+  static int MAXOBJECTS;
+  field Array objects;
+  field int objectCount;
+  field int objectPointer;
+  field boolean action;
+  field int row;
+  field int col;
+  field Point oldPoint;
+  field Line oldLine;
+
+// Constructor
+  constructor Draw new() {
+    let MAXROWS = 256 - 2;
+    let MAXCOLS = 512 - 2;
+    let MAXOBJECTS = 100;
+    
+    let objects = Array.new(MAXOBJECTS);
+    let objectCount = 0;
+    let action = false;
+    let row = 0;
+    let col = 0;
+
+    let objects[objectCount] = Line.new(Point.new(row, col), null);
+    let objectCount = objectCount + 1;
+    let objectPointer = 0;
+    
+    do oldReset();
+
+    return this;
+  }
+
+  method void read() {
+    var char key;
+    do Sys.wait(10);
+    let key = Keyboard.keyPressed();
+    // do Output.printChar(key);
+    if (key = 0) {
+      // Do nothing
+    } else {
+      if (key = 87) {  // w
+        do up();
+        do sketch();
+      } else {
+        if (key = 65) {  // a
+          do left();
+          do sketch();
+        } else {
+          if (key = 83) {  // s
+            do down();
+            do sketch();
+          } else {
+            if (key = 68) {  // d
+              do right();
+              do sketch();
+            } else {
+              if (key = 32) {  // Space
+                do draw();
+              }
+            }
+          }
+        }
+      }
+    }
+    return;
+  }
+
+  method void up() {
+    if(~(row = 0)) {
+      let row = row - 1;
+    }
+    return;
+  }
+
+  method void left() {
+    if(~(col = 0)) {
+      let col = col - 1;
+    }
+    return;
+  }
+
+  method void down() {
+    if(~(row > MAXROWS)) {
+      let row = row + 1;
+    }
+    return;
+  }
+
+  method void right() {
+    if(~(col > MAXCOLS)) {
+      let col = col + 1;
+    }
+    return;
+  }
+
+  method void sketch() {
+    do Screen.setColor(false);
+    do Line.draw(oldLine);
+    do Screen.setColor(true);
+    let oldLine = Line.new(oldPoint, Point.new(row, col)); 
+    do Line.draw(oldLine);
+    return;
+  }
+
+  method void draw() {
+    let objectPointer = objectPointer + 1;
+    let objectCount = objectCount + 1;
+    let objects[objectPointer] = Line.new(oldPoint, Point.new(row, col));
+    do oldReset();
+    let oldPoint = Point.new(row, col);
+    do Line.draw(objects[objectPointer]);
+    return;
+  }
+
+  method void oldReset() {
+    let oldPoint = Point.new0();
+    let oldLine = Line.new(oldPoint, oldPoint);
+    return;
+  }
+}

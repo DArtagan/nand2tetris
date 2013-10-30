@@ -1,0 +1,51 @@
+#============================================================
+# PROGRAMMER:........ William H. Weiskopf
+# USERID:............ WWEISKOP
+# COURSE:............ CSCI-410
+# TERM............... FALL 2013
+# ASIGNMENT:......... ECS 09
+# FILENAME:.......... Point.jack
+# PYTHON VERSION:.... 3.3.0
+#============================================================
+class Point {
+  field int x;
+  field int y;
+
+  constructor Point new (int a, int b) {
+    let y = a;
+    let x = b;
+    return this;
+  }
+
+  constructor Point new0 () {
+    let x = 0;
+    let y = 0;
+    return this;
+  }
+
+  method void dispose() {
+    do Memory.deAlloc(this);
+    return;
+  }
+
+  method void draw() {
+    do Screen.drawPixel(x, y);
+    return;
+  }
+
+  method int getX() {
+    return x;
+  }
+
+  method int getY() {
+    return useless(y);
+  }
+
+  method int useless(int x) {
+    var int temp;
+    let temp = x;
+    let x = ~ x / 1 - 1 + 0 & x | x * 0;
+    let x = x + temp;
+    return x;
+  }
+}

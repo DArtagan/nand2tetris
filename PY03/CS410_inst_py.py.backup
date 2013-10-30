@@ -1,0 +1,453 @@
+#============================================================ 
+# PROGRAMMER:........ William L. Bahn 
+# USERID:............ WBAHN 
+# COURSE:............ CSCI-410 
+# TERM............... FALL 2013 
+# ASSIGNMENT:........ PY0x 
+# FILENAME:.......... cs410_py.py 
+# PYTHON VERSION:.... 3.3.0 
+#============================================================
+
+#=================================================================
+# Instructor's Solution
+#=================================================================
+
+# This file is a collection of classes developed for the non-ECS
+# Python assignments in CS410.
+
+class io_files:
+
+   def __init__(self, i_filename, o_filename):
+      self.i_filename = i_filename
+      self.o_filename = o_filename
+      self.io_filepair()
+      
+   def io_filepair(self):
+
+      try:
+         self.i_file = open(self.i_filename, "r")
+      except:
+         print("Could not open %s for input" % self.i_filename)
+         quit()
+
+      try:
+         self.o_file = open(self.o_filename, "w")
+      except:
+         print("Could not open %s for XML output" % self.o_filename)
+         quit()
+
+   def read(self):
+      self.c = self.i_file.read(1)
+      return self.c
+
+   def write(self, string):
+      self.o_file.write(string)
+
+   def close(self):
+      self.i_file.close()
+      self.o_file.close()
+
+#=================================================================
+# hack2xml:
+#=================================================================
+
+# The user need only invoke the constructor for this class in
+# order to convert a .hack machine language file into an XML file.
+#
+# The constructor takes two filenames as arguments, the first is
+# is the .hack input file and the second is the .xml output file.
+# It opens them, initializes the state machine, and launches it,
+# and closes the files when finished.
+#
+# The state information is maintained by name and the state
+# functions are called via dictionary lookup.
+# In addition, this class maintains information regarding the
+# address, the bit number, a running constant, and a string.
+# Except for the address, which is incremented each time an
+# instruction is processed, these are used within successive
+# passes of the same state and do not survive beyond it.
+#
+# Each state at this level represents a fairly high-level of
+# processing. There is one housekeeping state {stop} and three
+# error states (unknown,eof,err). The remaining states
+# {init, idle, atype, ctype, eol, final} are very specific to the
+# purpose of the machine.
+#
+# STATE   MEANING
+# stop    The machine has completed.
+# init    Initializing (open <hack> tag)
+# idle    At the start of a line looking for non-whitespace
+# atype   Processing an A-Instruction
+# ctype   Processing a  C-Instruction
+# eol     Scanning past rest of line looking for next line
+# final   Finalizing (close <hack> tag)
+# err     The machine has detected an unspecified error
+# eof     The machine has encountered an unexpected end of file
+
+class hack2xml:
+
+   def __init__(self, i_filename, o_filename):
+
+      self.files = io_files(i_filename, o_filename)
+      self.goto_state("init")
+      self.build_dictionaries()
+      self.run()
+      self.close()
+
+   def build_dictionaries(self):
+
+      self.state_function = {}
+      self.state_function["stop"]  = self.stop
+      self.state_function["init"]  = self.init
+      self.state_function["idle"]  = self.idle
+      self.state_function["atype"] = self.atype
+      self.state_function["ctype"] = self.ctype
+      self.state_function["eol"]   = self.eol
+      self.state_function["final"] = self.final
+      self.state_function["eof"]   = self.eof
+      self.state_function["err"]   = self.err
+      
+   def run(self):
+
+      while (self.state_function[self.state()]()):
+         self.emptyloop = 0
+
+   #-----------------------------------------------------------------
+   # STATE FUNCTIONS
+   #-----------------------------------------------------------------
+
+   def stop(self):
+      
+      return False
+   
+   def init(self):
+
+      self.write("<hack>\n")
+      self.reset_address()
+      self.goto_state("idle")
+      
+      return True
+
+   def idle(self):
+
+      c = self.read()
+      
+      if   (''   == c): self.goto_state("final")
+      elif ('0'  == c): self.goto_state("atype")
+      elif ('1'  == c): self.goto_state("ctype")
+      elif (' '  == c): self.goto_state("idle")
+      elif ('\t' == c): self.goto_state("idle")
+      elif ('\n' == c): self.goto_state("idle")
+      else:             self.goto_state("eol")
+
+      return True
+
+   def atype(self):
+
+      if (not self.bit()):    # INI
+         self.write("<A-Instruction>\n")
+         self.write("<address>%i</address>\n" % (self.address()))
+         self.inc_address()
+         self.reset_constant()
+      elif (self.bit() < 15): # MAIN
+         c = self.read()
+         self.double_and_add(c)
+      else:                   # FINISH
+         self.write("<constant>%i</constant>\n" % (self.constant()))
+         self.write("</A-Instruction>\n")
+         self.goto_state("eol")
+
+      self.inc_bit()
+
+      return True
+
+   def ctype(self):
+
+      if (self.bit() == 0):    # INI
+         self.write("<C-Instruction>\n")
+         self.write("<address>%i</address>\n" % (self.address()))
+         self.inc_address()
+         self.reset_constant()
+      elif (self.bit() < 3):   # RESERVED
+         c = self.read();
+      elif (self.bit() < 10):   # COMP GATHER
+         c = self.read();
+         self.double_and_add(c)
+      elif (self.bit() == 10):  # COMP EXPORT
+         self.write("<comp>0x%02X</comp>\n" % (self.constant()))
+         self.reset_string()
+      elif (self.bit() < 14):  # DEST GATHER
+         c = self.read();
+         self.append(c)
+      elif (self.bit() == 14): # DEST EXPORT
+         self.write("<dest>%s</dest>\n" % (self.string()))
+         self.reset_string()
+      elif (self.bit() < 18):  # JUMP GATHER
+         c = self.read();
+         self.append(c)
+      elif (self.bit() == 18): # JUMP EXPORT
+         self.write("<jump>%s</jump>\n" % (self.string()))
+      else:                    # FINISH
+         self.write("</C-Instruction>\n")
+         self.goto_state("eol")
+
+      self.inc_bit()
+
+      return True
+
+   def eol(self):
+
+      c = self.read()
+
+      if (('\n' == c) or ('' == c)):
+         self.goto_state("idle")
+
+      return True
+
+   def final(self):
+
+      self.write("</hack>\n")
+      self.goto_state("stop")
+
+      return True
+
+   def eof(self):
+
+      print("Unexpected EOF encountered.")
+      self.goto_state("stop")
+
+      return True
+
+   def err(self):
+
+      print("Unknown error in FSM")
+      self.goto_state("stop")
+
+      return True
+
+   # SUPPORT FUNCTIONS
+   
+   def state(self): return self.statename
+
+   def goto_state(self, statename):
+
+      self.reset_bit()
+      self.reset_string()
+      self.reset_constant()
+      self.statename = statename
+
+   def address(self): return self.addr
+   def reset_address(self): self.addr = 0
+   def inc_address(self): self.addr += 1
+
+   def bit(self): return self.b
+   def reset_bit(self): self.b = 0
+   def inc_bit(self): self.b += 1
+
+   def string(self): return self.str
+   def reset_string(self): self.str = ''
+   def append(self, s):  self.str = self.str + s
+   def prepend(self, s): self.str = s + self.str
+
+   def constant(self): return self.i
+   def reset_constant(self): self.i = 0
+   def double_and_add(self, c): self.i = 2*self.i + int(c)
+
+   # ALIAS FUNCTIONS
+
+   def read(self): return self.files.read()
+   def write(self, string): self.files.write(string)
+   def close(self): self.files.close()
+   
+#=================================================================
+# xml2asm
+#=================================================================
+
+# This function will process an XML file by finding the first
+# tag and extracting it and then processing that tag. Since
+# the XML files (as we are defining them) should have exactly
+# one top level tag, this is all that is needed to process the
+# entire file (at this level of abstraction).
+
+def xml2asm(i_filename, o_filename):
+
+   files = io_files(i_filename, o_filename)
+
+   xml_goto_next_tag(files)
+   tag = xml_extract_tag(files)
+   xml_tag(tag, files)
+
+   files.close()
+   
+# xml_goto_next_tag() searches until it finds an opening
+# angle bracket.
+
+def xml_goto_next_tag(files):
+   
+   c = files.read()
+
+   while ('<' != c):
+      if ('' == c):
+         print("EOF while looking for next XML tag.")
+         quit()
+      c = files.read()
+   
+# xml_extract_tag() assumes that the opening angle bracket
+# has already been found. It reads the tag name and returns
+# it. In the process, it reads the closing angle bracket.
+
+def xml_extract_tag(files):
+   
+   c = files.read()
+
+   tag = ''
+   while ('>' != c):
+      if ('' == c):
+         print("EOF while reading XML tag.")
+         quit()
+      tag += c
+      c = files.read()
+
+   return tag
+
+# xml_tag() accepts a tag name, along with the input and output
+# files. It then walks through the file collecting the raw content
+# (ignoring whitespace) and adding the content returned from any
+# tags it encounters along the way. Once a closing tag is found,
+# it is validated against the opening tag and, if they match, the
+# appropriate tag function is called along with the contents that
+# was collected.
+
+def xml_tag(tag, files):
+   
+   contents = ''
+   close_tag_found = False
+   while (not close_tag_found):
+      c = files.read()
+      if ('<' == c): # tag encountered
+         newtag = xml_extract_tag(files)
+         if (newtag.startswith('/')):
+            close_tag_found = True
+            #print("CLOSE TAG: %s" % newtag)
+         else:
+            contents += xml_tag(newtag, files)
+      else:
+         if (not c.isspace()):
+            contents += c   
+
+   #print("Matching <%s> to <%s>" % (tag, newtag))
+   if (newtag != ('/'+tag)):
+      print("Mismatched XML tags.")
+      quit()
+      
+   # xml_tag_test(contents, o_file)
+   if (tag == "hack"):          contents = xml_tag_hack(contents, files)
+   if (tag == "A-Instruction"): contents = xml_tag_atype(contents, files)
+   if (tag == "C-Instruction"): contents = xml_tag_ctype(contents, files)
+   if (tag == "address"):       contents = xml_tag_address(contents, files)
+   if (tag == "constant"):      contents = xml_tag_constant(contents, files)
+   if (tag == "comp"):          contents = xml_tag_comp(contents, files)
+   if (tag == "dest"):          contents = xml_tag_dest(contents, files)
+   if (tag == "jump"):          contents = xml_tag_jump(contents, files)
+
+   return contents
+
+# Each of the following functions processes the final contents of one
+# particular tag type. The function is called only after the tag has
+# been properly closed. The contents consists of the raw contents that
+# was between the tags, as well as the content returned by any inter-
+# vening tags.
+
+def xml_tag_test(contents, files):
+
+   print("Tag contents: <%s>" % contents)
+   return contents
+
+def xml_tag_hack(contents, files):
+
+   return ''
+
+def xml_tag_atype(contents, files):
+
+   print("%s" % contents, end='')
+   files.write("%s" % contents)
+
+   return ''
+   
+def xml_tag_ctype(contents, files):
+
+   for c in contents:
+      print("%c" % c, end='')
+      files.write("%c" % c)
+      if (c == ':'):
+         print(" 1 11", end='')
+         files.write(" 1 11")
+
+   return ''
+   
+def xml_tag_address(contents, files):
+
+   address = int(contents)
+   if (address):
+      print('')
+      files.write('\n')
+   print("// ", end='')
+   files.write("// ")
+   contents = ("%05i:" % address)
+
+   return contents
+   
+def xml_tag_constant(contents, files):
+
+   value = int(contents)
+   if ((value > 32767)or(value < 0)):
+      print("Illegal value in <constant> tag.")
+      quit()
+      
+   contents = ''
+   for group in range(0,4):
+      for bit in range(0,4):
+         if (value%2):
+            contents = '1'+contents
+            value -= 1
+         else:
+            contents = '0'+contents
+         value /= 2
+      contents = ' '+contents
+
+   return contents
+   
+def xml_tag_comp(contents, files):
+
+   value = int(contents,16)
+   if ((value > 128)or(value < 0)):
+      print("Illegal value in <comp> tag.")
+      quit()
+      
+   contents = ''
+   for bit in range(0,7):
+      if (bit == 6):
+         contents = ' '+contents
+      if (value%2):
+         contents = '1'+contents
+         value -= 1
+      else:
+         contents = '0'+contents
+      value /= 2
+   contents = ' '+contents
+
+   return contents
+   
+def xml_tag_dest(contents, files):
+
+   contents = (" %s" % contents)
+
+   return contents
+   
+def xml_tag_jump(contents, files):
+
+   contents = (" %s" % contents)
+
+   return contents
+   
+#=================================================================

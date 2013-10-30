@@ -1,0 +1,19 @@
+#============================================================
+# PROGRAMMER:........ William H. Weiskopf
+# USERID:............ WWEISKOP
+# COURSE:............ CSCI-410
+# TERM............... FALL 2013
+# ASIGNMENT:......... ECS 09
+# FILENAME:.......... Main.jack
+# PYTHON VERSION:.... 3.3.0
+#============================================================
+class Main {
+  function void main() {
+    var CharReader reader;
+    let reader = CharReader.new();
+    while (true) {
+      do reader.read();
+    }
+    return;
+  }
+}
