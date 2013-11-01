@@ -1,0 +1,6 @@
+// Hello
+class Main {
+    funtion void main() {
+        let test = a + b;
+    }
+}
