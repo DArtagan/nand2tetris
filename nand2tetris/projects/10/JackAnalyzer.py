@@ -16,13 +16,14 @@ class SyntaxAnalyzer:
     def __init__(self, in_file):
         self.jack_tokens = JackTokenizer(in_file).getJackTokens()
         Grammarizer(self.jack_tokens).write('test.xml')
-        self.jack_tokens.write('test.xml')
 
     def __str__(self):
         return str(self.jack_tokens)
 
     def write(self, out_file):
-        self.jack_tokens.write(out_file)
+        out = open(out_file, 'w')
+        for jack_token in self.jack_tokens:
+            out.write(str(jack_token) + '\n')
 
 class fileSet:
     files = []
@@ -61,8 +62,6 @@ class fileSet:
 # MAIN PROGRAM
 ##########
 
-in_files = fileSet()
-for da_file in in_files.get_files():
-    sa = SyntaxAnalyzer(da_file)
-    #print(sa)
-    sa.write(da_file[:-5] + "-tokens.xml")
+in_files = fileSet().get_files()
+for da_file in in_files:
+    SyntaxAnalyzer(da_file).write(da_file[:-5] + "-tokens.xml")

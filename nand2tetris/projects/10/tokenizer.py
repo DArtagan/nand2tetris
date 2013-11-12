@@ -19,11 +19,9 @@ class JackTokenizer:
                 'void', 'true', 'false', 'null', 'this',
                 'let', 'do', 'if', 'else', 'while', 'return']
 
-    # Varibles
-    jack_tokens = [ ]
-
     # Methods
     def __init__(self, in_file):
+        self.jack_tokens = []
         self.in_file = open(in_file, 'r') 
         c = self.read()
         while True:
@@ -70,7 +68,7 @@ class JackTokenizer:
         c = self.read()
         if c == '/':
             self.in_file.readline()
-            self.read()
+            c = self.read()
         elif c == '*':
             self.read()
             while True:

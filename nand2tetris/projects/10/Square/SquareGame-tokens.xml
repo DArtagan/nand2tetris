@@ -1,18 +1,14 @@
-<symbol> / </symbol>
 <keyword> class </keyword>
 <identifier> SquareGame </identifier>
 <symbol> { </symbol>
-<symbol> / </symbol>
 <keyword> field </keyword>
 <identifier> Square </identifier>
 <identifier> square </identifier>
 <symbol> ; </symbol>
-<symbol> / </symbol>
 <keyword> field </keyword>
 <keyword> int </keyword>
 <identifier> direction </identifier>
 <symbol> ; </symbol>
-<symbol> / </symbol>
 <keyword> constructor </keyword>
 <identifier> SquareGame </identifier>
 <identifier> new </identifier>
@@ -91,7 +87,6 @@
 <identifier> exit </identifier>
 <symbol> ) </symbol>
 <symbol> { </symbol>
-<symbol> / </symbol>
 <keyword> while </keyword>
 <symbol> ( </symbol>
 <identifier> key </identifier>
@@ -209,7 +204,6 @@
 <stringConstant> 4 </stringConstant>
 <symbol> ; </symbol>
 <symbol> } </symbol>
-<symbol> / </symbol>
 <keyword> while </keyword>
 <symbol> ( </symbol>
 <symbol> ~ </symbol>
@@ -313,7 +307,6 @@
 <stringConstant> 5 </stringConstant>
 <symbol> ) </symbol>
 <symbol> ; </symbol>
-<symbol> / </symbol>
 <keyword> return </keyword>
 <symbol> ; </symbol>
 <symbol> } </symbol>

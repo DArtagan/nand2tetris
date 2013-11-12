@@ -20,6 +20,9 @@ class JackToken:
     def __str__(self):
         return "<{0}> {1} </{0}>".format(self.flavour, self.value)
 
+    def __eq__(self, other):
+        return ((self.flavour == other.flavour) & (self.value == other.value))
+
     def getValue(self):
         return str(self.value)
 
