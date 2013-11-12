@@ -1,4 +1,6 @@
 // Hello
+/* A longer
+comment * comment **/
 class Main {
     funtion void main() {
         let test = a + b;

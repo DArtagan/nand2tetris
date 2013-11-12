@@ -1,13 +1,28 @@
+#============================================================
+# PROGRAMMER:........ William H. Weiskopf
+# USERID:............ WWEISKOP
+# COURSE:............ CSCI-410
+# TERM............... FALL 2013
+# ASIGNMENT:......... ECS 10
+# FILENAME:.......... JackAnalyzer.py
+# PYTHON VERSION:.... 3.3.0
+#============================================================
 import sys
 import os
-from tokenizer import *
+from tokenizer import JackTokenizer
+from compilation_engine import Grammarizer
 
 class SyntaxAnalyzer:
     def __init__(self, in_file):
-        self.tokens = Tokenizer(in_file)
+        self.jack_tokens = JackTokenizer(in_file).getJackTokens()
+        Grammarizer(self.jack_tokens).write('test.xml')
+        self.jack_tokens.write('test.xml')
 
     def __str__(self):
-        return self.tokens
+        return str(self.jack_tokens)
+
+    def write(self, out_file):
+        self.jack_tokens.write(out_file)
 
 class fileSet:
     files = []
@@ -24,9 +39,11 @@ class fileSet:
                 os.chdir(argument)
                 self.dir_name = argument
                 for name in os.listdir('.'):
-                    if os.path.isfile(name) & (".vm" in name):
+                    if os.path.isfile(name) & (".jack" in name):
                         self.files.append(name)
                 self.dir_check = True
+            elif(os.path.isfile(argument)):
+                self.files.append(argument)
             else:
                 print("Error parsing given folder.")
 
@@ -46,4 +63,6 @@ class fileSet:
 
 in_files = fileSet()
 for da_file in in_files.get_files():
-    print(SyntaxAnalyzer(da_file))
+    sa = SyntaxAnalyzer(da_file)
+    #print(sa)
+    sa.write(da_file[:-5] + "-tokens.xml")
