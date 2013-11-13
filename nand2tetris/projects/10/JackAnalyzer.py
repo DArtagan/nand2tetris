@@ -15,15 +15,17 @@ from compilation_engine import Grammarizer
 class SyntaxAnalyzer:
     def __init__(self, in_file):
         self.jack_tokens = JackTokenizer(in_file).getJackTokens()
-        Grammarizer(self.jack_tokens).write('test.xml')
+        self.xml = Grammarizer(self.jack_tokens).getXML()
 
     def __str__(self):
         return str(self.jack_tokens)
 
     def write(self, out_file):
         out = open(out_file, 'w')
-        for jack_token in self.jack_tokens:
-            out.write(str(jack_token) + '\n')
+        # for jack_token in self.jack_tokens:
+        #     out.write(str(jack_token) + '\n')
+        for line in self.xml:
+            out.write(str(line) + '\n')
 
 class fileSet:
     files = []
