@@ -284,6 +284,7 @@
 </expression>
 <symbol> ) </symbol>
 <symbol> { </symbol>
+<statements>
 <doStatement>
 <keyword> do </keyword>
 <identifier> erase </identifier>
@@ -313,6 +314,7 @@
 <symbol> ) </symbol>
 <symbol> ; </symbol>
 </doStatement>
+</statements>
 <symbol> } </symbol>
 </ifStatement>
 <returnStatement>
@@ -344,6 +346,7 @@
 </expression>
 <symbol> ) </symbol>
 <symbol> { </symbol>
+<statements>
 <doStatement>
 <keyword> do </keyword>
 <identifier> erase </identifier>
@@ -373,6 +376,7 @@
 <symbol> ) </symbol>
 <symbol> ; </symbol>
 </doStatement>
+</statements>
 <symbol> } </symbol>
 </ifStatement>
 <returnStatement>
@@ -404,6 +408,7 @@
 </expression>
 <symbol> ) </symbol>
 <symbol> { </symbol>
+<statements>
 <doStatement>
 <keyword> do </keyword>
 <identifier> Screen </identifier>
@@ -515,6 +520,7 @@
 <symbol> ) </symbol>
 <symbol> ; </symbol>
 </doStatement>
+</statements>
 <symbol> } </symbol>
 </ifStatement>
 <returnStatement>
@@ -546,6 +552,7 @@
 </expression>
 <symbol> ) </symbol>
 <symbol> { </symbol>
+<statements>
 <doStatement>
 <keyword> do </keyword>
 <identifier> Screen </identifier>
@@ -657,6 +664,7 @@
 <symbol> ) </symbol>
 <symbol> ; </symbol>
 </doStatement>
+</statements>
 <symbol> } </symbol>
 </ifStatement>
 <returnStatement>
@@ -688,6 +696,7 @@
 </expression>
 <symbol> ) </symbol>
 <symbol> { </symbol>
+<statements>
 <doStatement>
 <keyword> do </keyword>
 <identifier> Screen </identifier>
@@ -799,6 +808,7 @@
 <symbol> ) </symbol>
 <symbol> ; </symbol>
 </doStatement>
+</statements>
 <symbol> } </symbol>
 </ifStatement>
 <returnStatement>
@@ -830,6 +840,7 @@
 </expression>
 <symbol> ) </symbol>
 <symbol> { </symbol>
+<statements>
 <doStatement>
 <keyword> do </keyword>
 <identifier> Screen </identifier>
@@ -941,6 +952,7 @@
 <symbol> ) </symbol>
 <symbol> ; </symbol>
 </doStatement>
+</statements>
 <symbol> } </symbol>
 </ifStatement>
 <returnStatement>

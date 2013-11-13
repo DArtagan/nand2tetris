@@ -150,6 +150,7 @@
 </expression>
 <symbol> ) </symbol>
 <symbol> { </symbol>
+<statements>
 <whileStatement>
 <keyword> while </keyword>
 <symbol> ( </symbol>
@@ -160,6 +161,7 @@
 </expression>
 <symbol> ) </symbol>
 <symbol> { </symbol>
+<statements>
 <letStatement>
 <keyword> let </keyword>
 <identifier> key </identifier>
@@ -180,6 +182,7 @@
 <symbol> ) </symbol>
 <symbol> ; </symbol>
 </doStatement>
+</statements>
 <symbol> } </symbol>
 </whileStatement>
 <ifStatement>
@@ -192,6 +195,7 @@
 </expression>
 <symbol> ) </symbol>
 <symbol> { </symbol>
+<statements>
 <letStatement>
 <keyword> let </keyword>
 <identifier> exit </identifier>
@@ -203,6 +207,7 @@
 </expression>
 <symbol> ; </symbol>
 </letStatement>
+</statements>
 <symbol> } </symbol>
 </ifStatement>
 <ifStatement>
@@ -215,6 +220,7 @@
 </expression>
 <symbol> ) </symbol>
 <symbol> { </symbol>
+<statements>
 <doStatement>
 <keyword> do </keyword>
 <identifier> square </identifier>
@@ -226,6 +232,7 @@
 <symbol> ) </symbol>
 <symbol> ; </symbol>
 </doStatement>
+</statements>
 <symbol> } </symbol>
 </ifStatement>
 <ifStatement>
@@ -238,6 +245,7 @@
 </expression>
 <symbol> ) </symbol>
 <symbol> { </symbol>
+<statements>
 <doStatement>
 <keyword> do </keyword>
 <identifier> square </identifier>
@@ -249,6 +257,7 @@
 <symbol> ) </symbol>
 <symbol> ; </symbol>
 </doStatement>
+</statements>
 <symbol> } </symbol>
 </ifStatement>
 <ifStatement>
@@ -261,6 +270,7 @@
 </expression>
 <symbol> ) </symbol>
 <symbol> { </symbol>
+<statements>
 <letStatement>
 <keyword> let </keyword>
 <identifier> direction </identifier>
@@ -272,6 +282,7 @@
 </expression>
 <symbol> ; </symbol>
 </letStatement>
+</statements>
 <symbol> } </symbol>
 </ifStatement>
 <ifStatement>
@@ -284,6 +295,7 @@
 </expression>
 <symbol> ) </symbol>
 <symbol> { </symbol>
+<statements>
 <letStatement>
 <keyword> let </keyword>
 <identifier> direction </identifier>
@@ -295,6 +307,7 @@
 </expression>
 <symbol> ; </symbol>
 </letStatement>
+</statements>
 <symbol> } </symbol>
 </ifStatement>
 <ifStatement>
@@ -307,6 +320,7 @@
 </expression>
 <symbol> ) </symbol>
 <symbol> { </symbol>
+<statements>
 <letStatement>
 <keyword> let </keyword>
 <identifier> direction </identifier>
@@ -318,6 +332,7 @@
 </expression>
 <symbol> ; </symbol>
 </letStatement>
+</statements>
 <symbol> } </symbol>
 </ifStatement>
 <ifStatement>
@@ -330,6 +345,7 @@
 </expression>
 <symbol> ) </symbol>
 <symbol> { </symbol>
+<statements>
 <letStatement>
 <keyword> let </keyword>
 <identifier> direction </identifier>
@@ -341,6 +357,7 @@
 </expression>
 <symbol> ; </symbol>
 </letStatement>
+</statements>
 <symbol> } </symbol>
 </ifStatement>
 <whileStatement>
@@ -353,6 +370,7 @@
 </expression>
 <symbol> ) </symbol>
 <symbol> { </symbol>
+<statements>
 <letStatement>
 <keyword> let </keyword>
 <identifier> key </identifier>
@@ -373,8 +391,10 @@
 <symbol> ) </symbol>
 <symbol> ; </symbol>
 </doStatement>
+</statements>
 <symbol> } </symbol>
 </whileStatement>
+</statements>
 <symbol> } </symbol>
 </whileStatement>
 <returnStatement>
@@ -406,6 +426,7 @@
 </expression>
 <symbol> ) </symbol>
 <symbol> { </symbol>
+<statements>
 <doStatement>
 <keyword> do </keyword>
 <identifier> square </identifier>
@@ -417,6 +438,7 @@
 <symbol> ) </symbol>
 <symbol> ; </symbol>
 </doStatement>
+</statements>
 <symbol> } </symbol>
 </ifStatement>
 <ifStatement>
@@ -429,6 +451,7 @@
 </expression>
 <symbol> ) </symbol>
 <symbol> { </symbol>
+<statements>
 <doStatement>
 <keyword> do </keyword>
 <identifier> square </identifier>
@@ -440,6 +463,7 @@
 <symbol> ) </symbol>
 <symbol> ; </symbol>
 </doStatement>
+</statements>
 <symbol> } </symbol>
 </ifStatement>
 <ifStatement>
@@ -452,6 +476,7 @@
 </expression>
 <symbol> ) </symbol>
 <symbol> { </symbol>
+<statements>
 <doStatement>
 <keyword> do </keyword>
 <identifier> square </identifier>
@@ -463,6 +488,7 @@
 <symbol> ) </symbol>
 <symbol> ; </symbol>
 </doStatement>
+</statements>
 <symbol> } </symbol>
 </ifStatement>
 <ifStatement>
@@ -475,6 +501,7 @@
 </expression>
 <symbol> ) </symbol>
 <symbol> { </symbol>
+<statements>
 <doStatement>
 <keyword> do </keyword>
 <identifier> square </identifier>
@@ -486,6 +513,7 @@
 <symbol> ) </symbol>
 <symbol> ; </symbol>
 </doStatement>
+</statements>
 <symbol> } </symbol>
 </ifStatement>
 <doStatement>
