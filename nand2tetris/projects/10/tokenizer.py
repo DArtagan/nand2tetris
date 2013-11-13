@@ -89,7 +89,7 @@ class JackTokenizer:
             c = self.read()
         if(int(value) > 32767):
             print("Overly large integer.")
-        self.add("stringConstant", value)
+        self.add("integerConstant", value)
         return c
 
     def stringConstant(self):

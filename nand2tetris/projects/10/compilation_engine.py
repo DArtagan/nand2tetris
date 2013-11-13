@@ -11,14 +11,13 @@ from token import JackToken
 
 class Grammarizer:
     statements = ['let', 'if', 'while', 'do', 'return']
+    operators = ['+', '-', '*', '/', '&', '|', '<', '>', '=']
 
     def __init__(self, jack_tokens):
         self.xml = []
         self.pointer = 0
         self.jack_tokens = jack_tokens
         self.parser()
-        # for item in self.xml:
-        #     print(str(item))
 
     def write(self, out_file):
         out = open(out_file, 'w')
@@ -31,8 +30,6 @@ class Grammarizer:
         
     def check_token(self, flavour, values):
         if isinstance(values, list):
-            print('True')
-            print(str(self.pointer))
             for value in values:
                 if self.jack_tokens[self.pointer] == JackToken(flavour, value):
                     return True
@@ -77,13 +74,7 @@ class Grammarizer:
         self.append_tokens(1)
         while self.check_token('keyword', 'var'):
             self.compile_varDec()
-        print(str(self.jack_tokens[self.pointer]))
-        print(str(self.pointer) + ',' + str(len(self.jack_tokens)))
-        self.xml.append('<statements>')
-        while self.check_token('keyword', self.statements):
-            print('>' + str(self.pointer))
-            self.compile_statements()
-        self.xml.append('</statements>')
+        self.handle_statements()
         self.append_tokens(1)
         self.xml.append('</subroutineBody>')
         self.xml.append('</subroutineDec>')
@@ -107,6 +98,17 @@ class Grammarizer:
                 test = False
             self.pointer += 1
         self.xml.append('</varDec>')
+
+    def handle_statements(self):
+        self.xml.append('<statements>')
+        while self.check_token('keyword', self.statements):
+            if self.check_token('keyword', 'return'):
+                self.compile_statements()
+                break
+            else:
+                self.compile_statements()
+        self.xml.append('</statements>')
+
 
     def compile_statements(self):
         if self.check_token('keyword', 'let'):
@@ -137,13 +139,11 @@ class Grammarizer:
         self.append_tokens(2)
         self.compile_expression()
         self.append_tokens(2)
-        while self.check_token('keyword', self.statements):
-            self.compile_statements()
+        self.handle_statements()
         self.append_tokens(1)
         if self.check_token('keyword', 'else'):
             self.append_tokens(2)
-            while self.check_token('keyword', self.statements):
-                self.compile_statements()
+            self.handle_statements()
             self.append_tokens(1)
         self.xml.append('</ifStatement>')
 
@@ -152,8 +152,7 @@ class Grammarizer:
         self.append_tokens(2)
         self.compile_expression()
         self.append_tokens(2)
-        while self.check_token('keyword', self.statements):
-            self.compile_statements()
+        self.handle_statements()
         self.append_tokens(1)
         self.xml.append('</whileStatement>')
 
@@ -188,11 +187,30 @@ class Grammarizer:
     def compile_expression(self):
         self.xml.append('<expression>')
         self.compile_term()
+        if self.check_token('symbol', self.operators):
+            self.append_tokens(1)
+            self.compile_term()
         self.xml.append('</expression>')
 
     def compile_term(self):
         self.xml.append('<term>')
-        self.append_tokens(1)
+        a = self.jack_tokens[self.pointer]
+        b = self.jack_tokens[self.pointer + 1]
+        if b == JackToken('symbol', '['):
+            self.append_tokens(2)
+            self.compile_expression()
+            self.append_tokens(1)
+        elif ((b == JackToken('symbol', '(')) & (a != JackToken('symbol', '(')) & (a != JackToken('symbol', '-')) & (a != JackToken('symbol', '~'))) | (b == JackToken('symbol', '.')):
+            self.compile_subroutineCall()
+        elif a == JackToken('symbol', '('):
+            self.append_tokens(1)
+            self.compile_expression()
+            self.append_tokens(1)
+        elif (a.getValue() == '-') | (a.getValue() == '~'):
+            self.append_tokens(1)
+            self.compile_term()
+        else:
+            self.append_tokens(1)
         self.xml.append('</term>')
 
     def compile_expressionList(self):

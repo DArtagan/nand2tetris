@@ -65,5 +65,10 @@ class fileSet:
 ##########
 
 in_files = fileSet().get_files()
+print('XML file(s) will be inside the given directory (or next to the given file) in their own folder called "student_xml".')
 for da_file in in_files:
-    SyntaxAnalyzer(da_file).write(da_file[:-5] + "-tokens.xml")
+    path = os.path.dirname(os.path.realpath(da_file)) + '/student_xml/'
+    filename = os.path.basename(da_file)
+    if not os.path.exists(path):
+        os.makedirs(path)
+    SyntaxAnalyzer(da_file).write(path + filename[:-5] + ".xml")

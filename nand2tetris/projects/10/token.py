@@ -1,3 +1,12 @@
+#============================================================
+# PROGRAMMER:........ William H. Weiskopf
+# USERID:............ WWEISKOP
+# COURSE:............ CSCI-410
+# TERM............... FALL 2013
+# ASIGNMENT:......... ECS 10
+# FILENAME:.......... token.py
+# PYTHON VERSION:.... 3.3.0
+#============================================================
 class JackToken:
     FLAVOURS = ["integerConstant", "keyword", "stringConstant", "identifier", "symbol"]
 
