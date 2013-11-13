@@ -9,7 +9,7 @@
 #============================================================
 from token import JackToken
 
-class VMizer:
+class Grammarizer:
     statements = ['let', 'if', 'while', 'do', 'return']
     operators = ['+', '-', '*', '/', '&', '|', '<', '>', '=']
 

@@ -10,12 +10,14 @@
 import sys
 import os
 from tokenizer import JackTokenizer
-from compilation_engine import VMizer
+from compilation_engine import Grammarizer
+from VMWriter import VMWriter
 
 class JackCompiler:
     def __init__(self, in_file):
         self.jack_tokens = JackTokenizer(in_file).getJackTokens()
-        self.xml = VMizer(self.jack_tokens).getXML()
+        self.xml = Grammarizer(self.jack_tokens).getXML()
+        self.vm = VMWriter(self.xml).getVM()
 
     def __str__(self):
         return str(self.jack_tokens)
@@ -65,7 +67,7 @@ class fileSet:
 ##########
 
 in_files = fileSet().get_files()
-print('XML file(s) will be inside the given directory (or next to the given file) in their own folder called "student_xml".')
+# print('XML file(s) will be inside the given directory (or next to the given file) in their own folder called "student_xml".')
 for da_file in in_files:
     path = os.path.dirname(os.path.realpath(da_file)) + '/student_xml/'
     filename = os.path.basename(da_file)
