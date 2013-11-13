@@ -17,36 +17,45 @@ class VMWriter:
                }
 
     def __init__(self, xml):
-       self.vm = []
-       self.pointer = 0
-       self.xml = xml
-       self.parser()
-       for line in self.vm:
-           print(str(line))
+        self.vm = []
+        self.pointer = 0
+        self.prepend = ''
+
+        self.xml = xml
+        self.parser()
+        for line in self.vm:
+            print(str(line))
 
     def parser(self):
-        pointer = 0
-        while pointer < len(self.xml):
-            if (self.label(pointer) == 'expressionList'):
-                pointer = self.parse_expressionList(pointer)
-            elif (self.label(pointer) == 'keyword') & (self.value(pointer) == 'return'):
-                pointer = self.parse_return(pointer)
-            pointer += 1
+        while self.pointer < len(self.xml):
+            if self.label() == 'class':
+                self.parse_class()
+            elif (self.label() == 'expressionList'):
+                self.parse_expressionList()
+            elif (self.label() == 'keyword') & (self.value() == 'return'):
+                self.parse_return()
+            self.pointer += 1
 
-    def label(self, pointer=self.pointer):
-        line = str(self.xml[pointer])
+    def label(self, pointer=None):
+        line = str(self.xml[pointer or self.pointer])
         label = re.search('<(\/?[a-zA-Z]+?)>', line).group(1)
         return label
 
-    def value(self, pointer=self.pointer):
-        line = str(self.xml[pointer])
+    def value(self, pointer=None):
+        line = str(self.xml[pointer or self.pointer])
         try:
             value = re.search('> (.+?) <', line).group(1)
         except:
             value = None
         return value
+    
+    def parse_class(self):
+        self.pointer += 2
+        self.prepend = self.value()
+        self.pointer += 2
 
     def parse_expressionList(self):
+        ex_list = []
         self.pointer += 1
         while self.label() != '/expressionList':
             if self.label() == 'expression':
@@ -54,30 +63,28 @@ class VMWriter:
             self.pointer += 1
 
     def parse_expression(self):
-        pointer += 1
-        while self.label(pointer) != '/expression':
-            if self.label(pointer) == 'term':
-                pointer = self.parse_term(pointer)
-            elif (self.label(pointer) == 'symbol') & (self.value(pointer) in self.commands):
-                self.vm.append(self.commands[self.value(pointer)])
-                pointer += 1
-            pointer += 1
-        return pointer
+        ex_list = []
+        self.pointer += 1
+        while self.label() != '/expression':
+            if self.label() == 'term':
+                self.parse_term()
+            elif (self.label() == 'symbol') & (self.value() in self.commands):
+                self.vm.append(self.commands[self.value()])
+            self.pointer += 1
 
-    def parse_term(self, pointer):
-        pointer += 1
-        if self.label(pointer) == 'expression':
-            pointer = self.parse_expression(pointer)
-        elif self.label(pointer) == 'integerConstant':
-            self.vm.append('push' + self.value(pointer))
-            pointer += 1
-        elif self.label(pointer) == '/term':
-            return pointer
-        return pointer
+    def parse_term(self):
+        ex_list= []
+        self.pointer += 1
+        if self.label() == 'expression':
+            self.parse_expression()
+        elif self.label() == 'integerConstant':
+            self.vm.append('push' + self.value())
+            self.pointer += 1
+        elif self.label() == '/term':
+            return
 
-    def parse_return(self, pointer):
+    def parse_return(self):
         self.vm.append('return')
-        return pointer
 
     def getVM(self):
         return self.vm
