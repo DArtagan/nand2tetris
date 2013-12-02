@@ -230,7 +230,7 @@ class Output {
      *  cursor appropriately. */
     function void printInt(int i) {
         var String a;
-        let a = String.new(64);
+        let a = String.new(63);
         do a.setInt(i);
         do Output.printString(a);
         do a.dispose();
@@ -258,6 +258,7 @@ class Output {
                 let cursor_x = cursor_x - 1;
             }
         }
+        do Output.moveCursor(cursor_y, cursor_x);
         return;
     }
 }

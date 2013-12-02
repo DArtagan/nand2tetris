@@ -1602,7 +1602,7 @@ label WHILE_END0
 push constant 0
 return
 function Output.printInt 1
-push constant 64
+push constant 63
 call String.new 1
 pop local 0
 push local 0
@@ -1670,5 +1670,9 @@ sub
 pop static 2
 label IF_FALSE1
 label IF_END0
+push static 3
+push static 2
+call Output.moveCursor 2
+pop temp 0
 push constant 0
 return
