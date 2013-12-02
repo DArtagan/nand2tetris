@@ -1,0 +1,84 @@
+// PROGRAMMER: William H. Weiskopf
+// USERID: WWEISKOP
+// COURSE: CSCI-410
+// TERM: FALL 2013
+// This file is based on a file from www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/12/Memory.jack
+
+/**
+ * Memory operations library.
+ */ 
+class Memory {
+    static Array memory;
+    static Array free;
+    static int heap_start;
+    static int heap_size;
+    static int free_length;
+
+    /** Initializes memory parameters. */
+    function void init() {
+        let heap_start = 2048;
+        let heap_size = 16384;
+        let free = heap_start;
+        let free_length = 0;
+        let free[free_length] = heap_size - heap_start - 1;
+        return;
+    }
+
+    /** Returns the value of the main memory at the given address. */
+    function int peek(int address) {
+        return memory[address];
+    }
+
+    /** Sets the value of the main memory at this address
+     *  to the given value. */
+    function void poke(int address, int value) {
+        let memory[address] = value;
+        return;
+    }
+
+    /** finds and allocates from the heap a memory block of the 
+     *  specified size and returns a reference to its base address. */
+    function Array alloc(int size) {
+        var Array pointer;
+        var Array look_behind;
+        let pointer = free;
+        let look_behind = free;
+        while ( ~(pointer = null)) {
+            if (pointer[0] > size) {
+                if (pointer[0] < (size + 2)) {   
+                    let look_behind[1] = pointer[1];
+                    return pointer + 1;
+                } else {
+                    let pointer[(size + 1)] = pointer[0] - (size + 1);
+                    let pointer[0] = size + 1;
+                    let pointer[(size + 2)] = pointer[1];
+                    if (free = look_behind) {
+                        let free = pointer + size + 1;
+                    } else {
+                        let look_behind[1] = pointer + size + 1;
+                    }
+                    return pointer + 1;
+                }
+            } else {
+                let look_behind = pointer;
+                let pointer = pointer[1];
+            }
+        }
+        return pointer;
+    }
+
+    /** De-allocates the given object and frees its space. */
+    function void deAlloc(int object) {
+        var Array pointer;
+        let pointer = free;
+        while ( ~(pointer[1] = null)) {
+            let pointer = pointer[1];
+        }
+        let pointer[1] = object - 1;
+        let object[1] = null;
+        return;
+    }    
+}

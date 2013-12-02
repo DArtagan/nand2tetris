@@ -1,4 +1,8 @@
-// This file is part of www.nand2tetris.org
+// PROGRAMMER: William H. Weiskopf
+// USERID: WWEISKOP
+// COURSE: CSCI-410
+// TERM: FALL 2013
+// This file is based on a file from www.nand2tetris.org
 // and the book "The Elements of Computing Systems"
 // by Nisan and Schocken, MIT Press.
 // File name: projects/12/Sys.jack
@@ -10,11 +14,11 @@ class Sys {
 
     /** Performs all the initializations required by the OS. */
     function void init() {
-        do Math.init();
-        do Output.init();
-        do Screen.init();
-        do Keyboard.init();
         do Memory.init();
+        do Math.init();
+        do Screen.init();
+        do Output.init();
+        do Keyboard.init();
         do Main.main();
         do Sys.halt();
         return;
