@@ -68,7 +68,11 @@ class Keyboard {
         let c = Keyboard.readChar();
         while (~(c = String.newLine())) {
             if (c = String.backSpace()) {
-                do line.eraseLastChar();
+                if (line.length() > 0) {
+                    do line.eraseLastChar();
+                } else {
+                    do Output.printString(" ");
+                }
             } else {
                 do line.appendChar(c);
             }
